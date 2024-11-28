@@ -1,0 +1,6 @@
+@ClaimTrack.NetBackend_HostAddress = http://localhost:5119
+
+GET {{ClaimTrack.NetBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
