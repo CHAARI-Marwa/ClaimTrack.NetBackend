@@ -10,5 +10,6 @@ namespace ClaimTrack.NetBackend.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<ArticleVendu> ArticlesVendus { get; set; }
     }
 }
