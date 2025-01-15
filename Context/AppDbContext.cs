@@ -14,5 +14,6 @@ namespace ClaimTrack.NetBackend.Context
         public DbSet<ArticleVendu> ArticlesVendus { get; set; }
         public DbSet<Reclamation> Reclamations { get; set; }
         public DbSet<Intervention> Interventions { get; set; }
+        public DbSet<PieceDetail> PieceDetails { get; set; }
     }
 }

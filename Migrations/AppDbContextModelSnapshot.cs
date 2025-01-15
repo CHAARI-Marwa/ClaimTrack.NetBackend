@@ -63,6 +63,26 @@ namespace ClaimTrack.NetBackend.Migrations
                     b.ToTable("Interventions");
                 });
 
+            modelBuilder.Entity("ClaimTrack.NetBackend.Models.PieceDetail", b =>
+                {
+                    b.Property<int>("PieceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PieceId"));
+
+                    b.Property<string>("IntitulePiece")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int");
+
+                    b.HasKey("PieceId");
+
+                    b.ToTable("PieceDetails");
+                });
+
             modelBuilder.Entity("ClaimTrack.NetBackend.Models.Reclamation", b =>
                 {
                     b.Property<int>("Id")
