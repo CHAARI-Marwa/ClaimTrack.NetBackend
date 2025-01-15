@@ -4,6 +4,7 @@ using ClaimTrack.NetBackend.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClaimTrack.NetBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250115135159_withouticollection")]
+    partial class withouticollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,25 +61,7 @@ namespace ClaimTrack.NetBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateIntervention")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Duree")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PieceRechangeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReclamationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Technicien")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PieceRechangeId");
 
                     b.ToTable("Interventions");
                 });
@@ -190,17 +175,6 @@ namespace ClaimTrack.NetBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClaimTrack.NetBackend.Models.Intervention", b =>
-                {
-                    b.HasOne("ClaimTrack.NetBackend.Models.PieceDetail", "PieceRechange")
-                        .WithMany()
-                        .HasForeignKey("PieceRechangeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PieceRechange");
                 });
 
             modelBuilder.Entity("ClaimTrack.NetBackend.Models.Reclamation", b =>

@@ -18,6 +18,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")))
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IReclamationRepository, ReclamationRepository>();
 builder.Services.AddTransient<IArticleVenduRepository, ArticleVenduRepository>();
+builder.Services.AddTransient<IInterventionRepository, InterventionRepository>();
 builder.Services.AddCors();
 
 var app = builder.Build();

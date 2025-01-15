@@ -23,9 +23,5 @@ namespace ClaimTrack.NetBackend.Models
         [Required(ErrorMessage = "Role is required.")]
         [RegularExpression("^(client|responsable)$", ErrorMessage = "Role must be either 'client' or 'responsable'.")]
         public string Role { get; set; }
-
-        public ICollection<ArticleVendu> ArticlesVendus { get; set; }
-
-        public ICollection<Reclamation> Reclamations { get; set; }
     }
 }

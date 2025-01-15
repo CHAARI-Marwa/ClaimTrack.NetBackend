@@ -12,6 +12,13 @@ namespace ClaimTrack.NetBackend.Repositories
         {
             _context = context;
         }
+        public async Task<IEnumerable<ArticleVendu>> GetArticlesByUserIdAsync(int userId)
+        {
+            return await _context.ArticlesVendus
+                                 .Where(article => article.IdUser == userId)
+                                 .ToListAsync();
+        }
+
 
         // POST : Ajouter un nouvel article
         public async Task<ArticleVendu> AddArticleAsync(ArticleVendu article)

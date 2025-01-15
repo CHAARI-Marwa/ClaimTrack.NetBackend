@@ -117,46 +117,33 @@ namespace ClaimTrack.NetBackend.Controllers
 
             return Ok(reclamationsDto);
         }
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateReclamation(int id, ReclamationDTO reclamationDTO)
-        //{
-        //    var existingReclamation = await _reclamationRepository.GetByIdAsync(id);
-        //    if (existingReclamation == null)
-        //    {
-        //        return NotFound($"Reclamation with ID {id} not found.");
-        //    }
-        //    var user = await _context.Users.FindAsync(reclamationDTO.IdUser);
-        //    if (user == null)
-        //    {
-        //        return NotFound($"User with ID {reclamationDTO.IdUser} not found.");
-        //    }
-        //    var article = await _context.ArticlesVendus.FindAsync(reclamationDTO.IdArticle);
-        //    if (article == null)
-        //    {
-        //        return NotFound($"Article with ID {reclamationDTO.IdArticle} not found.");
-        //    }
-        //    existingReclamation.Sujet = reclamationDTO.Sujet;
-        //    existingReclamation.Description = reclamationDTO.Description;
-        //    existingReclamation.DateReclamation = reclamationDTO.DateReclamation;
-        //    existingReclamation.Statut = reclamationDTO.Statut;
-        //    existingReclamation.IdUser = reclamationDTO.IdUser;
-        //    existingReclamation.IdArticle = reclamationDTO.IdArticle;
-        //    existingReclamation.IdIntervention = reclamationDTO.IdIntervention;
+        [HttpGet("ByUser/{userId}")]
+        public async Task<ActionResult<IEnumerable<ReclamationDTO>>> GetReclamationsByUserId(int userId)
+        {
+            // Filtrer les réclamations pour l'utilisateur donné
+            var reclamations = await _reclamationRepository.GetAllAsync();
+            var filteredReclamations = reclamations.Where(r => r.IdUser == userId).ToList();
 
-        //    try
-        //    {
-        //        await _reclamationRepository.UpdateAsync(existingReclamation);
-        //        return NoContent();
-        //    }
-        //    catch (KeyNotFoundException ex)
-        //    {
-        //        return NotFound(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException?.Message ?? ex.Message);
-        //    }
-        //}
+            if (!filteredReclamations.Any())
+            {
+                return NotFound($"Aucune réclamation trouvée pour l'utilisateur avec l'ID {userId}.");
+            }
+
+            // Mapper les réclamations en DTO
+            var reclamationsDto = filteredReclamations.Select(r => new ReclamationDTO
+            {
+                Sujet = r.Sujet,
+                Description = r.Description,
+                DateReclamation = r.DateReclamation,
+                Statut = r.Statut,
+                IdUser = r.IdUser,
+                IdArticle = r.IdArticle,
+                IdIntervention = r.IdIntervention
+            }).ToList();
+
+            return Ok(reclamationsDto);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReclamation(int id, ReclamationDTO reclamationDTO)
         {

@@ -7,5 +7,6 @@ namespace ClaimTrack.NetBackend.Repositories
         Task<ArticleVendu> AddArticleAsync(ArticleVendu article);
         Task<ArticleVendu?> GetArticleByIdAsync(int id);
         Task<IEnumerable<ArticleVendu>> GetArticlesAsync();
+        Task<IEnumerable<ArticleVendu>> GetArticlesByUserIdAsync(int id);
     }
 }

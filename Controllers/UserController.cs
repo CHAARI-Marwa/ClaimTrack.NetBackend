@@ -64,6 +64,43 @@ namespace ClaimTrack.NetBackend.Controllers
                 }
             });
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            var users = await userRepository.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            var user = await userRepository.GetUserByIdAsync(id);
+            if (user == null) return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, User user)
+        {
+            if (id != user.Id) return BadRequest("User ID mismatch.");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var existingUser = await userRepository.GetUserByIdAsync(id);
+            if (existingUser == null) return NotFound();
+
+            await userRepository.UpdateUserAsync(user);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var deleted = await userRepository.DeleteUserAsync(id);
+            if (!deleted) return NotFound();
+
+            return NoContent();
+        }
 
     }
 }

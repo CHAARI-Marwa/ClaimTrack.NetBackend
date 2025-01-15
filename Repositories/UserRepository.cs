@@ -48,6 +48,32 @@ namespace ClaimTrack.NetBackend.Repositories
             return BCrypt.Net.BCrypt.Verify(plainTextPassword, hashedPassword);
         }
 
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _context.Set<User>().ToListAsync();
+        }
+
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _context.Set<User>().FindAsync(id);
+        }
+        public async Task<User> UpdateUserAsync(User user)
+        {
+            _context.Set<User>().Update(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            var user = await GetUserByIdAsync(id);
+            if (user == null) return false;
+
+            _context.Set<User>().Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 

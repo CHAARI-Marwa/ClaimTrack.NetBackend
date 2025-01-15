@@ -55,6 +55,27 @@ namespace ClaimTrack.NetBackend.Controllers
 
             return Ok(articleDto);  // Retourne le DTO de l'article
         }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetArticlesByUserId(int userId)
+        {
+            var articles = await _repository.GetArticlesByUserIdAsync(userId);
+
+            if (articles == null || !articles.Any())
+            {
+                return NotFound();  // Si aucun article n'est trouvé pour cet utilisateur
+            }
+
+            var articleDtos = articles.Select(article => new ArticleDto
+            {
+                Id = article.Id,
+                NomArticle = article.NomArticle,
+                IdUser = article.IdUser,
+                DateAchat = article.DateAchat,
+                DureeGarantie = article.DureeGarantie
+            }).ToList();
+
+            return Ok(articleDtos);  // Retourne la liste des DTOs des articles
+        }
 
         // POST : Ajouter un nouvel article
         [HttpPost]
