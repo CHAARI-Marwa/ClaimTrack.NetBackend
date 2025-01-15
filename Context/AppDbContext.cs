@@ -1,4 +1,5 @@
-﻿using ClaimTrack.NetBackend.Models;
+﻿
+using ClaimTrack.NetBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClaimTrack.NetBackend.Context
@@ -11,5 +12,7 @@ namespace ClaimTrack.NetBackend.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<ArticleVendu> ArticlesVendus { get; set; }
+        public DbSet<Reclamation> Reclamations { get; set; }
+        public DbSet<Intervention> Interventions { get; set; }
     }
 }

@@ -20,5 +20,7 @@ namespace ClaimTrack.NetBackend.Models
 
         [Required(ErrorMessage = "La durée de garantie est requise.")]
         public int DureeGarantie { get; set; }
+
+        public Reclamation Reclamation { get; set; }
     }
 }

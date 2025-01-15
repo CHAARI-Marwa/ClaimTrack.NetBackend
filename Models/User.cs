@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ClaimTrack.NetBackend.Models
 {
@@ -26,5 +25,7 @@ namespace ClaimTrack.NetBackend.Models
         public string Role { get; set; }
 
         public ICollection<ArticleVendu> ArticlesVendus { get; set; }
+
+        public ICollection<Reclamation> Reclamations { get; set; }
     }
 }
