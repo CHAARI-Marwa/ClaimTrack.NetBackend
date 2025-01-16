@@ -38,6 +38,7 @@ namespace ClaimTrack.NetBackend.Controllers
         }
 
         // PUT: api/PieceDetail/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPieceDetail(int id, PieceDetail pieceDetail)
         {
@@ -68,6 +69,7 @@ namespace ClaimTrack.NetBackend.Controllers
         }
 
         // POST: api/PieceDetail
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<PieceDetail>> PostPieceDetail(PieceDetail pieceDetail)
         {
@@ -96,6 +98,45 @@ namespace ClaimTrack.NetBackend.Controllers
         private bool PieceDetailExists(int id)
         {
             return _context.PieceDetails.Any(e => e.PieceId == id);
+        }
+
+        // PUT: api/PieceDetail/updateQuantity/5
+        [HttpPut("updateQuantity/{id}")]
+        public async Task<IActionResult> UpdatePieceQuantity(int id)
+        {
+            var pieceDetail = await _context.PieceDetails.FindAsync(id);
+
+            if (pieceDetail == null)
+            {
+                return NotFound();
+            }
+
+            if (pieceDetail.Quantite > 0)
+            {
+                pieceDetail.Quantite--; // Decrement the quantity by 1
+                _context.Entry(pieceDetail).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(pieceDetail); // Return the updated piece
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PieceDetailExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest("La quantité de la pièce est déjà épuisée.");
+            }
         }
     }
 }
