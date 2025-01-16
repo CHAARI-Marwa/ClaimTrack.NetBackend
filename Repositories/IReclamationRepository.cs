@@ -10,5 +10,7 @@ namespace ClaimTrack.NetBackend.Repositories
         Task<IEnumerable<Reclamation>> GetAllAsync();
         Task UpdateAsync(Reclamation reclamation);
         Task DeleteAsync(int id);
+        Task<Reclamation> GetByArticleIdAsync(int articleId);
+        Task DeleteByArticleIdAsync(int articleId);
     }
 }

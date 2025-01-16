@@ -83,13 +83,23 @@ namespace ClaimTrack.NetBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, User user)
         {
-            if (id != user.Id) return BadRequest("User ID mismatch.");
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (id != user.Id)
+                return BadRequest("User ID mismatch.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var existingUser = await userRepository.GetUserByIdAsync(id);
-            if (existingUser == null) return NotFound();
+            if (existingUser == null)
+                return NotFound();
 
-            await userRepository.UpdateUserAsync(user);
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
+            existingUser.Role = user.Role;
+
+            await userRepository.UpdateUserAsync(existingUser);
             return NoContent();
         }
 

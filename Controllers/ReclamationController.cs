@@ -231,5 +231,34 @@ namespace ClaimTrack.NetBackend.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        [HttpDelete("by-article/{articleId}")]
+        public async Task<IActionResult> DeleteReclamationByArticleId(int articleId)
+        {
+            if (articleId <= 0)
+            {
+                return BadRequest("Invalid Article ID.");
+            }
+
+            var existingReclamation = await _reclamationRepository.GetByArticleIdAsync(articleId);
+            if (existingReclamation == null)
+            {
+                return NotFound($"No reclamation found for Article with ID {articleId}.");
+            }
+
+            try
+            {
+                await _reclamationRepository.DeleteByArticleIdAsync(articleId);
+                return NoContent(); // HTTP 204, suppression réussie sans contenu retourné
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
     }
 }

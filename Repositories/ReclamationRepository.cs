@@ -60,5 +60,23 @@ namespace ClaimTrack.NetBackend.Repositories
                 throw new KeyNotFoundException($"Reclamation with ID {id} not found.");
             }
         }
+        public async Task<Reclamation> GetByArticleIdAsync(int articleId)
+        {
+            return await _context.Reclamations
+                .FirstOrDefaultAsync(r => r.IdArticle == articleId);
+        }
+
+        // Supprimer une réclamation par l'id de l'article
+        public async Task DeleteByArticleIdAsync(int articleId)
+        {
+            var reclamation = await GetByArticleIdAsync(articleId);
+            if (reclamation == null)
+            {
+                throw new KeyNotFoundException($"No reclamation found for article ID {articleId}.");
+            }
+
+            _context.Reclamations.Remove(reclamation);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -102,5 +102,53 @@ namespace ClaimTrack.NetBackend.Controllers
 
             return CreatedAtAction(nameof(GetArticleById), new { id = addedArticleDto.Id }, addedArticleDto);
         }
+    
+    // DELETE : Supprimer un article par son Id
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteArticle(int id)
+    {
+        var existingArticle = await _repository.GetArticleByIdAsync(id);
+
+        if (existingArticle == null)
+        {
+            return NotFound();  // Si l'article à supprimer n'est pas trouvé
+        }
+
+        await _repository.DeleteArticleAsync(id);
+        return NoContent();  // Retourne NoContent en cas de succès
+    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateArticle(int id, ArticleDto articleDto)
+        {
+            var article = new ArticleVendu
+            {
+                Id = id,
+                NomArticle = articleDto.NomArticle,
+                IdUser = articleDto.IdUser,
+                DateAchat = articleDto.DateAchat,
+                DureeGarantie = articleDto.DureeGarantie
+            };
+
+            try
+            {
+                var updatedArticle = await _repository.UpdateArticleAsync(id, article);
+
+                var updatedArticleDto = new ArticleDto
+                {
+                    Id = updatedArticle.Id,
+                    NomArticle = updatedArticle.NomArticle,
+                    IdUser = updatedArticle.IdUser,
+                    DateAchat = updatedArticle.DateAchat,
+                    DureeGarantie = updatedArticle.DureeGarantie
+                };
+
+                return Ok(updatedArticleDto);  // Retourner l'article mis à jour
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);  // Si l'article n'existe pas
+            }
+        }
+
     }
 }

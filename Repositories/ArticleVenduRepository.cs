@@ -43,5 +43,34 @@ namespace ClaimTrack.NetBackend.Repositories
                                  .Include(a => a.User)  // Inclut l'utilisateur lié
                                  .FirstOrDefaultAsync(a => a.Id == id);  // Recherche par Id
         }
+        public async Task DeleteArticleAsync(int id)
+        {
+            var article = await _context.ArticlesVendus.FindAsync(id);
+            if (article != null)
+            {
+                _context.ArticlesVendus.Remove(article);
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task<ArticleVendu> UpdateArticleAsync(int id, ArticleVendu article)
+        {
+            var existingArticle = await _context.ArticlesVendus.FindAsync(id);
+
+            if (existingArticle == null)
+            {
+                throw new ArgumentNullException(nameof(existingArticle), "L'article n'existe pas.");
+            }
+
+            existingArticle.NomArticle = article.NomArticle;
+            existingArticle.IdUser = article.IdUser;
+            existingArticle.DateAchat = article.DateAchat;
+            existingArticle.DureeGarantie = article.DureeGarantie;
+
+            _context.ArticlesVendus.Update(existingArticle);
+            await _context.SaveChangesAsync();
+
+            return existingArticle;
+        }
+
     }
 }
